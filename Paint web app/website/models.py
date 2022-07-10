@@ -1,4 +1,6 @@
 from . import db
+from openpyxl import Workbook
+import openpyxl
 
 class Paints(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,12 +23,14 @@ class Methods(db.Model):
     method_name = db.Column(db.String(50), nullable=False)
 
 class Steps(db.Model):
-    paint_id = db.Column(db.Integer, db.ForeignKey('paints.id'), primary_key=True)
-    area_id = db.Column(db.Integer, db.ForeignKey('areas.id'), primary_key=True)
-    method_id = db.Column(db.Integer, db.ForeignKey('methods.id'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    paint_id = db.Column(db.Integer, db.ForeignKey('paints.id'))
+    area_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
+    method_id = db.Column(db.Integer, db.ForeignKey('methods.id'))
 
     paints = db.relationship('Paints')
     areas = db.relationship('Areas')
     methods = db.relationship('Methods')
     
-
+   
+    

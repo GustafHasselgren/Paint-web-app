@@ -1,9 +1,51 @@
 {% extends "base.html" %}
 
-{% block title %} {{area.area}} {% endblock %}
+{% block title %} {{scheme.scheme_name}} {{area.area}} {% endblock %}
 
-{% block main_content %}
+{% block navbar_content %}
+    <span class="d-flex navbar-text">
+        Add step:
+    </span>
+    <form class="d-flex  justify-content-end" method="POST">
+        <select class="form-select mx-2" name="paint">
+            <option selected>Paint</option>
+            {% for paint in paints %}
+            <option value="{{paint.id}}">
+                {{paint.paint_name}}
+            </option>
+            {%endfor%}
+        </select>
+        <select class="form-select mx-2" name="method">
+            <option selected>Method</option>
+            {% for method in methods %}
+            <option value="{{method.id}}">
+                {{method.method_name}}
+            </option>
+            {%endfor%}
+        </select>
+        <button class="btn btn-outline-secondary ms-1" type="submit">Add</button>
+    </form>
+    <div class="vr ms-3"></div>
+    <form method="POST" class="d-flex justify-content-end ms-3" action="{{url_for('views.delete_area', scheme_id=scheme.id, area_id=area.id)}}"> 
+        <button class="btn btn-outline-danger " type="submit">Delete Area</button>
+    </form>
+    <h3 class="navbar-text mx-2 flex-fill position-absolute top-50 start-50 translate-middle">{{scheme.scheme_name}}</h3>
 
+{% endblock %}
 
-
+{% block main_content %}  
+    <h5 class="text-center"> {{area.area}} </h5>
+        {% for step in steps %}
+            <div class="row justify-content-center">
+                <div class="col-2 text-center">
+                {{step.paints.paint_name}}
+                </div>
+                <div class="col-2 text-center">
+                {{step.methods.method_name}}
+                </div>
+                <form method="POST" class="text-center col-1" action="{{url_for('views.delete_step', scheme_id=scheme.id, area_id=area.id, step_id=step.id)}}"> 
+                    <button class="btn btn-outline-danger " type="submit">x</button>
+                </form>
+            </div>
+        {%endfor%}
 {% endblock %}
