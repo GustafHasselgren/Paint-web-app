@@ -7,16 +7,16 @@
         Add step:
     </span>
     <form class="d-flex  justify-content-end" method="POST">
-        <select class="form-select mx-2" name="paint">
-            <option selected>Paint</option>
+        <select class="form-select mx-2" name="paint" title="Select a paint">
+            <!--<option selected disabled class="">Select a paint</option>-->
             {% for paint in paints %}
-            <option value="{{paint.id}}">
-                {{paint.paint_name}}
-            </option>
+                <option value="{{paint.id}}">
+                    {{paint.paint_name}}
+                </option>
             {%endfor%}
         </select>
-        <select class="form-select mx-2" name="method">
-            <option selected>Method</option>
+        <select class="form-select mx-2" name="method" title="Select a method">
+            <!--<option selected disabled >Select a method</option>-->
             {% for method in methods %}
             <option value="{{method.id}}">
                 {{method.method_name}}
@@ -25,6 +25,9 @@
         </select>
         <button class="btn btn-outline-secondary ms-1" type="submit">Add</button>
     </form>
+    <a href="{{url_for('views.manage')}}">
+        <button class="btn btn-outline-secondary ms-2" >Manage</button>
+    </a>
     <div class="vr ms-3"></div>
     <form method="POST" class="d-flex justify-content-end ms-3" action="{{url_for('views.delete_area', scheme_id=scheme.id, area_id=area.id)}}"> 
         <button class="btn btn-outline-danger " type="submit">Delete Area</button>
@@ -44,7 +47,7 @@
                 {{step.methods.method_name}}
                 </div>
                 <form method="POST" class="text-center col-1" action="{{url_for('views.delete_step', scheme_id=scheme.id, area_id=area.id, step_id=step.id)}}"> 
-                    <button class="btn btn-outline-danger " type="submit">x</button>
+                    <button class="btn btn-outline-danger" type="submit">x</button>
                 </form>
             </div>
         {%endfor%}

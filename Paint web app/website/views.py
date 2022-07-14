@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from sre_constants import SUCCESS
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Schemes, Areas, Steps, Methods, Paints
 from . import db
 
@@ -11,6 +12,7 @@ def home():
         new_scheme = Schemes(scheme_name=request.form['name'], scheme_image=request.form['image'])
         db.session.add(new_scheme)
         db.session.commit()
+        flash('Scheme successfully added.')
         return redirect(url_for('views.home'))
     
     schemes = Schemes.query.all()
@@ -30,6 +32,7 @@ def get_scheme(scheme_id):
         new_area = Areas(area=request.form['name'], scheme_id=scheme_id)
         db.session.add(new_area)
         db.session.commit()
+        flash('Area successfully added.')
         return redirect(url_for('views.get_scheme', scheme_id=scheme_id))
     
     return render_template("scheme.html", 
@@ -44,6 +47,7 @@ def delete_scheme(scheme_id):
     scheme = Schemes.query.filter_by(id=scheme_id).first()
     db.session.delete(scheme)
     db.session.commit()
+    flash('Scheme successfully deleted.')
 
     return redirect(url_for('views.home'))
 
@@ -57,9 +61,11 @@ def set_area(scheme_id, area_id):
     area = Areas.query.filter_by(id=area_id).first()
     steps = Steps.query.filter_by(area_id=area_id).all()
     if request.method == 'POST':
+        
         new_step = Steps(paint_id=request.form['paint'], method_id=request.form['method'], area_id=area.id)
         db.session.add(new_step)
         db.session.commit()
+        flash('Step successfully added.')
         return redirect(url_for('views.set_area', scheme_id=scheme.id, area_id=area.id))
 
     return render_template("edit_area.html",
@@ -76,6 +82,7 @@ def delete_area(scheme_id, area_id):
     area = Areas.query.filter_by(id=area_id).first()
     db.session.delete(area)
     db.session.commit()
+    flash('Area successfully deleted.')
 
     return redirect(url_for('views.get_scheme',scheme_id=scheme_id))
 
@@ -87,5 +94,60 @@ def delete_step(scheme_id, area_id, step_id):
     step = Steps.query.filter_by(id=step_id).first()
     db.session.delete(step)
     db.session.commit()
+    flash('Step successfully deleted.')
 
     return redirect(url_for('views.set_area',scheme_id=scheme_id, area_id=area_id))
+
+#Visar kompletta databasen över färger och metoder, och att lägga till till dessa.
+@views.route('/manage', methods=['GET', 'POST'])
+def manage():
+    
+    paints = Paints.query.all()
+    methods = Methods.query.all()
+
+    if request.method == 'POST':
+        if request.form['paint']:
+            new_paint = Paints(paint_name=request.form['paint'])
+            db.session.add(new_paint)
+            db.session.commit()
+            flash('Paint successfully added.')
+        if request.form['method']:
+            new_method = Methods(method_name=request.form['method'])
+            db.session.add(new_method)
+            db.session.commit()
+            flash('Method successfully added.')
+
+        return redirect(url_for('views.manage'))
+      
+
+    return render_template('manage.html', paints=paints, methods=methods)
+
+#Hanterar delete av färger.
+@views.route('/delete/paint/<paint_id>/', methods=['POST'])
+def delete_paint(paint_id):
+    
+    paint = Paints.query.filter_by(id=paint_id).first()
+    db.session.delete(paint)
+    db.session.commit()
+    flash('Paint successfully deleted.')
+
+    return redirect(url_for('views.manage'))
+
+#Hanterar delete av metoder.
+@views.route('/delete/method/<method_id>/', methods=['POST'])
+def delete_method(method_id):
+    
+    method = Methods.query.filter_by(id=method_id).first()
+    db.session.delete(method)
+    db.session.commit()
+    flash('Method successfully deleted.')
+
+    return redirect(url_for('views.manage'))
+
+
+
+    
+
+
+
+

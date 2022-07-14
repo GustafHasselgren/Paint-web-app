@@ -1,6 +1,5 @@
 from . import db
-from openpyxl import Workbook
-import openpyxl
+
 
 class Paints(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -6,15 +6,15 @@
 <span class="navbar-text">
   Add scheme:
 </span>
-<form id="navbar-form" class="d-flex" method="post">
-  <input class="form-control mx-2" name="name" placeholder="Name" aria_label="Name">
-  <input class="form-control mx-1" name="image" placeholder="Image name" aria_label="Image name">
+<form id="navbar-form" class="d-flex" method="post" autocomplete="off">
+  <input class="form-control mx-2" name="name" placeholder="Name" aria_label="Name" required>
+  <input class="form-control mx-1" name="image" placeholder="Image name" aria_label="Image name" required>
   <button class="btn btn-outline-secondary mx-1" type="submit">Add</button>
 </form>
 {% endblock %}
 
 {% block main_content %}
-<div class="row">
+<div class="row g-5">
   {% for scheme in schemes%}
     <div class="col-sm-12 col-md-6 col-xl-4">
       <div class="card bg-body text-black border-white mx-auto my-3 rounded-3">

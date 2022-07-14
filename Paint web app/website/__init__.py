@@ -15,8 +15,6 @@ def create_app():
 
     app.register_blueprint(views, url_prefix='/')
 
-    from .models import Paints, Schemes, Areas, Methods, Steps
-
     create_database(app)
 
     return app

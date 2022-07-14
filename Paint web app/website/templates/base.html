@@ -20,9 +20,10 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" 
-          href="/">Painting App
-        </a>
+		<a class="navbar-brand" 
+		href="/">Painting App
+		</a>
+		<div class="vr mr-2"></div>
         <button 
 			class="navbar-toggler" 
 			type="button" 
@@ -44,23 +45,36 @@
 		</div>
       </div>
     </nav>
-
 		<div class="container">
+			{% for message in get_flashed_messages() %}
+			<div class="row justify-content-center">
+				<div class="alert alert-success alert-dismissible fade show align-items-center col-3 mt-3 shadow" role="alert">
+					<p class="text-center mb-0">{{message}}<p>
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+			</div>
+			<script type="text/javascript">
+				setTimeout(function() {
+        			bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+    			}, 2000)
+			</script>
+			{% endfor %}
 			{% block main_content %}
 			<!--Här läggs alla kort, forms, etc. -->
 			{% endblock %}
 		</div>
 
+		
 		<script 
 			type="text/javascript" 
 			src="{{url_for('static', filename='jquery-3.6.0.min.js') }}"></script>
 		<script 
 			type="text/javascript" 
 			src="{{url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
-		<script 
+		<!--<script 
 			type="text/javascript" 
-			src="{{url_for('static', filename='bootstrap.min.js') }}"></script>
-
+			src="{{url_for('static', filename='bootstrap.min.js') }}"></script>-->
+		
 
 	</body>
 </html> 

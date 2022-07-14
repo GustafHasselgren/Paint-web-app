@@ -6,8 +6,8 @@
     <span class="d-flex navbar-text">
         Add area:
     </span>
-    <form class="d-flex  justify-content-end" method="POST">
-        <input class="form-control mx-2" name="name" placeholder="Name" aria_label="Name">
+    <form class="d-flex  justify-content-end" method="POST" autocomplete="off">
+        <input class="form-control mx-2" name="name" placeholder="Name" aria_label="Name" required>
         <button class="btn btn-outline-secondary ms-1" type="submit">Add</button>
     </form>
     <div class="vr ms-3"></div>
@@ -21,9 +21,9 @@
     <div class="row">
         {% for area in scheme_areas %}
             <div class="col-xs-6 col-md-4 col-xl-3 mt-2">
-                <div class="card shadow">
+                <div class="card shadow ">
                     <h5 class="card-text text-center"> {{area.area}} </h5>
-                    <div class="row">
+                    <div class="row align-items-center">
                         {% for step in steps %}
                         {% if step.area_id == area.id%}
                         <div class="col-6 card-text text-center">
