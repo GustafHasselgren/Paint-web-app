@@ -12,8 +12,6 @@ if __name__ == '__main__':
 #   Fixa Mobile media
 #   
 #   Snart:
-#   
-#   
 #   Utöka Paints - Typ, Tillverkare, Färg-grupp - Sortera på Färg>Typ
 #   Lös 'Hover' på kort
 #   

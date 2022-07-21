@@ -52,28 +52,41 @@ def delete_scheme(scheme_id):
     return redirect(url_for('views.home'))
 
 #Visar alla steg i en del till ett scheme. Hanterar post-request för att lägga till nya steg.
-@views.route('/scheme/<scheme_id>/area/<area_id>', methods=['GET','POST'])
-def set_area(scheme_id, area_id):
+@views.route('/scheme/<scheme_id>/area/<area_id>/color/<filter_color>', methods=['GET','POST'])
+def set_area(scheme_id, area_id, filter_color):
 
     scheme=Schemes.query.filter_by(id=scheme_id).first()
-    paints = Paints.query.all()
+    colors = Paints.query.with_entities(Paints.color).distinct()
+    if filter_color == "No":
+        paints = Paints.query.all()
+    else:
+        paints = Paints.query.filter_by(color=filter_color).all()
+    
+    types = Paints.query.with_entities(Paints.type).distinct()    
     methods = Methods.query.all()
     area = Areas.query.filter_by(id=area_id).first()
     steps = Steps.query.filter_by(area_id=area_id).all()
     if request.method == 'POST':
         
-        new_step = Steps(paint_id=request.form['paint'], method_id=request.form['method'], area_id=area.id)
-        db.session.add(new_step)
-        db.session.commit()
-        flash('Step successfully added.')
-        return redirect(url_for('views.set_area', scheme_id=scheme.id, area_id=area.id))
+        if 'paint' in request.form and 'method' in request.form:
+            new_step = Steps(paint_id=request.form['paint'], method_id=request.form['method'], area_id=area.id)
+            db.session.add(new_step)
+            db.session.commit()
+            flash('Step successfully added.')
+        else:
+            filter_color = request.form['filter_color']
+
+        return redirect(url_for('views.set_area', scheme_id=scheme.id, area_id=area.id, filter_color=filter_color))
 
     return render_template("edit_area.html",
     scheme=scheme, 
     area=area,
     paints=paints,
     methods=methods,
-    steps=steps)
+    steps=steps,
+    colors = colors,
+    types=types,
+    filter_color=filter_color)
 
 #Hanterar delete av del till ett scheme. 
 @views.route('/delete/<scheme_id>/area/<area_id>', methods=['POST'])
@@ -87,16 +100,17 @@ def delete_area(scheme_id, area_id):
     return redirect(url_for('views.get_scheme',scheme_id=scheme_id))
 
 #Hanterar delete av ett steg till en del. 
-@views.route('/delete/<scheme_id>/area/<area_id>/step/<step_id>', methods=['POST'])
-def delete_step(scheme_id, area_id, step_id):
+@views.route('/delete/<scheme_id>/area/<area_id>/step/<step_id>/color/<filter_color>', methods=['POST'])
+def delete_step(scheme_id, area_id, step_id, filter_color):
     scheme_id=scheme_id
     area_id=area_id
+    filter_color=filter_color
     step = Steps.query.filter_by(id=step_id).first()
     db.session.delete(step)
     db.session.commit()
     flash('Step successfully deleted.')
 
-    return redirect(url_for('views.set_area',scheme_id=scheme_id, area_id=area_id))
+    return redirect(url_for('views.set_area',scheme_id=scheme_id, area_id=area_id, filter_color=filter_color))
 
 #Visar kompletta databasen över färger och metoder, och att lägga till till dessa.
 @views.route('/manage', methods=['GET', 'POST'])

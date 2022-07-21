@@ -4,6 +4,8 @@ from . import db
 class Paints(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     paint_name = db.Column(db.String(50), nullable=False)
+    type = db.Column(db.String(50))
+    color = db.Column(db.String(50))
 
 class Areas(db.Model):
     id = db.Column(db.Integer, primary_key=True)

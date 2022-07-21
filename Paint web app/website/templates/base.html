@@ -23,9 +23,12 @@
 		<a class="navbar-brand" 
 		href="/">Painting App
 		</a>
-		<div class="vr mr-2"></div>
+		<div class="vr mr-2 "></div>
+		{%block navbar_title%}
+		<!--Lokal titel utanför collapse-->
+		{% endblock %}
         <button 
-			class="navbar-toggler" 
+			class="navbar-toggler ms-auto" 
 			type="button" 
 			data-bs-toggle="collapse" 
 			data-bs-target="#navbarNavAltMarkup" 

@@ -2,19 +2,24 @@
 
 {% block title %} {{scheme.scheme_name}} {% endblock %}
 
+{%block navbar_title%}
+<h2 class="navbar-text mx-3">{{scheme.scheme_name}}</h2> 
+{% endblock %}
+
 {% block navbar_content %}
-    <span class="d-flex navbar-text">
+    <span class="navbar-text">
         Add area:
     </span>
-    <form class="d-flex  justify-content-end" method="POST" autocomplete="off">
+    <form class="d-flex justify-content-end" method="POST" autocomplete="off">
         <input class="form-control mx-2" name="name" placeholder="Name" aria_label="Name" required>
         <button class="btn btn-outline-secondary ms-1" type="submit">Add</button>
     </form>
-    <div class="vr ms-3"></div>
-    <form method="POST" class="d-flex justify-content-end ms-3" action="{{url_for('views.delete_scheme', scheme_id=scheme_id)}}"> 
+    
+    <form method="POST" class="d-flex justify-content-end ms-3 mt-3" action="{{url_for('views.delete_scheme', scheme_id=scheme_id)}}"> 
+        <div class="vr mx-3"></div>
         <button class="btn btn-outline-danger " type="submit">Delete Scheme</button>
     </form>
-    <h3 class="navbar-text mx-2 flex-fill position-absolute top-50 start-50 translate-middle">{{scheme.scheme_name}}</h3>
+    
 {% endblock %}
 
 {% block main_content %}
@@ -32,11 +37,13 @@
                         </div>
                         <div class="col-6 card-text text-center">
                         {{step.methods.method_name}}
+                        
                         </div>
                         
                         {%endif%}
                         {%endfor%}
-                        <a class="stretched-link" href="{{url_for('views.set_area', scheme_id=scheme.id, area_id=area.id)}}" ></a>
+                        <a class="stretched-link" href="{{url_for('views.set_area', scheme_id=scheme.id, area_id=area.id, filter_color='No')}}" ></a>
+                        
                     </div>
                 </div>
             </div>

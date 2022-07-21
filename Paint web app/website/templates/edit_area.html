@@ -2,53 +2,94 @@
 
 {% block title %} {{scheme.scheme_name}} {{area.area}} {% endblock %}
 
+{%block navbar_title%}
+<h2 class="navbar-text mx-3">{{scheme.scheme_name}}</h2> 
+{% endblock %}
+
 {% block navbar_content %}
-    <span class="d-flex navbar-text">
-        Add step:
+    <span class="d-flex navbar-text align-items-center ms-2">
+        Filter paints by color:
     </span>
-    <form class="d-flex  justify-content-end" method="POST">
-        <select class="form-select mx-2" name="paint" title="Select a paint">
-            <!--<option selected disabled class="">Select a paint</option>-->
-            {% for paint in paints %}
-                <option value="{{paint.id}}">
-                    {{paint.paint_name}}
+    <form class="d-flex justify-content-end" method="POST"> 
+        <select class="form-select mx-2" name="filter_color" title="Filter for a color">
+            <option value="No">
+                No filter        
+            </option>
+            {%for color in colors %}
+                <option value="{{color.color}}">
+                    {{color.color}}
                 </option>
             {%endfor%}
         </select>
+        <button class="btn btn-outline-secondary ms-2" type="submit">
+            Filter paints
+        </button>
+    </form>
+    <span class="d-flex navbar-text align-items-center ms-2">
+        Add step:
+    </span>
+    <form class="d-flex justify-content-end" method="POST">
+        <select class="form-select mx-2" name="paint" title="Select a paint">
+            <option selected disabled>Select a paint</option>
+            {%for tuple in types%}
+                {%for type in tuple%}
+                    <option disabled class="bg-secondary text-white"> 
+                        {{type}}
+                    </option>
+                    {% for paint in paints %}
+                        {%if paint.type==type%}
+                        <option value="{{paint.id}}">
+                            {{paint.paint_name}}
+                        </option>
+                        {%endif%}
+                    {%endfor%}
+                {%endfor%}
+            {%endfor%}
+        </select>
         <select class="form-select mx-2" name="method" title="Select a method">
-            <!--<option selected disabled >Select a method</option>-->
+            <option selected disabled >Select a method</option>
             {% for method in methods %}
             <option value="{{method.id}}">
                 {{method.method_name}}
             </option>
             {%endfor%}
         </select>
-        <button class="btn btn-outline-secondary ms-1" type="submit">Add</button>
+        <button class="btn btn-outline-secondary ms-2" type="submit">Add</button>
+        <a class="d-flex" href="{{url_for('views.manage')}}" style="text-decoration: none;">
+            <button class="btn btn-outline-warning ms-3" type="button">Manage</button>
+        </a>
     </form>
-    <a href="{{url_for('views.manage')}}">
-        <button class="btn btn-outline-secondary ms-2" >Manage</button>
-    </a>
-    <div class="vr ms-3"></div>
     <form method="POST" class="d-flex justify-content-end ms-3" action="{{url_for('views.delete_area', scheme_id=scheme.id, area_id=area.id)}}"> 
-        <button class="btn btn-outline-danger " type="submit">Delete Area</button>
+        <div class="vr ms-1"></div>
+        <button class="btn btn-outline-danger ms-3" type="submit">Delete Area</button>
     </form>
-    <h3 class="navbar-text mx-2 flex-fill position-absolute top-50 start-50 translate-middle">{{scheme.scheme_name}}</h3>
-
+      
 {% endblock %}
 
 {% block main_content %}  
     <h5 class="text-center"> {{area.area}} </h5>
         {% for step in steps %}
             <div class="row justify-content-center">
-                <div class="col-2 text-center">
-                {{step.paints.paint_name}}
+                <div class="col-5 d-flex">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-5 text-center">
+                            {{step.paints.paint_name}}
+                            </div>
+                            <div class="col-5 text-center">
+                            {{step.methods.method_name}}
+                            </div>
+                            <form method="POST" class="col-2 text-center d-flex" action="{{url_for('views.delete_step', scheme_id=scheme.id, area_id=area.id, step_id=step.id, filter_color=filter_color)}}"> 
+                                <div class="d-flex align-items-center">
+                                    <button class="btn-close btn-outline-danger" type="submit"></button>
+                                </div>
+                            </form>
+                            
+                        </div>
+                        <hr> 
+                    </div>
                 </div>
-                <div class="col-2 text-center">
-                {{step.methods.method_name}}
-                </div>
-                <form method="POST" class="text-center col-1" action="{{url_for('views.delete_step', scheme_id=scheme.id, area_id=area.id, step_id=step.id)}}"> 
-                    <button class="btn btn-outline-danger" type="submit">x</button>
-                </form>
             </div>
+        
         {%endfor%}
 {% endblock %}
